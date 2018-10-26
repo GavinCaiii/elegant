@@ -3,4 +3,9 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="comm_divider_line">#ffeeeeee</color>
+    <color name="comm_setting_line">#C8C7CC</color>
+
+    <color name="white">#ffffffff</color>
 </resources>
