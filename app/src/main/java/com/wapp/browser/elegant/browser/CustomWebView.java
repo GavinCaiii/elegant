@@ -15,7 +15,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -26,19 +25,20 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.GeolocationPermissions;
-import android.webkit.SslErrorHandler;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 
+import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
+import com.tencent.smtt.export.external.interfaces.SslError;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
+import com.tencent.smtt.export.external.interfaces.WebResourceError;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
+import com.tencent.smtt.sdk.ValueCallback;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.wapp.browser.elegant.BuildConfig;
 import com.wapp.browser.elegant.R;
 import com.wapp.browser.elegant.browser.paramters.BrowserParams;
@@ -148,9 +148,9 @@ public class CustomWebView extends WebView {
         webSettings.setSupportZoom(false);
         webSettings.setLoadWithOverviewMode(true);
         // 5.0以上需要添加http/https混合加载
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+//        }
         webSettings.setPluginState(WebSettings.PluginState.ON);
         // 设置H5字体不随系统字体的改变而改变
         webSettings.setTextZoom(100);
@@ -222,10 +222,17 @@ public class CustomWebView extends WebView {
         }
 
         @Override
-        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+        public void onReceivedSslError(WebView webView, SslErrorHandler sslErrorHandler, SslError sslError) {
             // 忽略ssl错误，继续加载网页
-            handler.proceed();
+            sslErrorHandler.proceed();
+            super.onReceivedSslError(webView, sslErrorHandler, sslError);
         }
+//
+//        @Override
+//        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+//            // 忽略ssl错误，继续加载网页
+//            handler.proceed();
+//        }
     }
 
     private class CustomWebChromeClient extends WebChromeClient {
@@ -255,10 +262,11 @@ public class CustomWebView extends WebView {
         }
 
         @Override
-        public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
-            callback.invoke(origin, true, false);
-            super.onGeolocationPermissionsShowPrompt(origin, callback);
+        public void onGeolocationPermissionsShowPrompt(String s, GeolocationPermissionsCallback geolocationPermissionsCallback) {
+            geolocationPermissionsCallback.invoke(s, true, false);
+            super.onGeolocationPermissionsShowPrompt(s, geolocationPermissionsCallback);
         }
+
         // For Android < 3.0
         public void openFileChooser(ValueCallback<Uri> uploadMsg) {
             mUploadFile = uploadMsg;
@@ -272,6 +280,7 @@ public class CustomWebView extends WebView {
         }
 
         // For Android  > 4.1.1
+        @Override
         public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
             mUploadFile = uploadMsg;
             openFileChoose(acceptType);

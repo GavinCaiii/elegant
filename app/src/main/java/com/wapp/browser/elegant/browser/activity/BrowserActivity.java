@@ -197,19 +197,19 @@ public class BrowserActivity extends BaseActivity implements IUpdateBrowserUi {
 
     @Override
     protected void onResume() {
-        mWebView.callJsMethod(ON_RESUME_EVENT);
+//        mWebView.callJsMethod(ON_RESUME_EVENT);
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        mWebView.callJsMethod(ON_STOP_EVENT);
+//        mWebView.callJsMethod(ON_STOP_EVENT);
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        mWebView.callJsMethod(ON_DESTROY_EVENT);
+//        mWebView.callJsMethod(ON_DESTROY_EVENT);
         mBrowserAdapter.onWindowClosed(this);
         super.onDestroy();
     }

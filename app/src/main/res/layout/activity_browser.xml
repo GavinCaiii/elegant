@@ -75,12 +75,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.wapp.wappbrowser.browser.CustomWebView
+        <com.wapp.browser.elegant.browser.CustomWebView
             android:id="@+id/wvActBrowser"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </com.wapp.wappbrowser.browser.CustomWebView>
+        </com.wapp.browser.elegant.browser.CustomWebView>
 
         <RelativeLayout
             android:id="@+id/rlActBrowserErr"
